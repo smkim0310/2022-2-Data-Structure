@@ -307,8 +307,7 @@ void treeprint_vector(tree root, int level){
 		if(check==level){
 			int ind=0;
 			while(v[i-1+ind]<v[i+ind]) ind++;
-			vector<int> levvec;
-			copy(v.begin()+i-1,v.begin()+i+ind,back_inserter(levvec));
+			vector<int> levvec(v.begin()+i-1,v.begin()+i+ind);
 			show_vector(levvec);
 			break;
 		}
