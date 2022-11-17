@@ -785,39 +785,38 @@ tree rebalance(tree node) {
 // rebuilds an AVL/BST tree with a list of keys sorted.
 // v – an array of keys sorted, n – the array size
 // use vector<int> version of inorder()
-//tree buildAVL(int* v, int n) {  // recreation method
-tree buildAVL(vector<int>& v, int n){
+tree buildAVL(int* v, int n) {  // recreation method
 	if (n <= 0) return nullptr;
 	DPRINT(cout << ">buildAVL v[0]=" << v[0] << " n=" << n << " mid=" << n / 2 << endl;);
 	int mid=n/2;
 
 	tree root=new TreeNode(v[mid]);
 
-	vector<int> left(v.begin(), v.begin()+mid);
-	vector<int> right(v.begin()+mid+1, v.end());
+	root->left=buildAVL(v,mid);
+	root->right=buildAVL(&v[mid+1],n-mid-1);
+	//root->right=buildAVL(v+mid+1,n-mid-1);
 
-	root->left=buildAVL(left,left.size());
-	root->right=buildAVL(right,right.size());
+	DPRINT(treeprint(root););
 
+	DPRINT(cout << "<buildAVL" << n << endl;);
 	return root;
 }
 
 // rebuilds an AVL/BST tree using a list of nodes sorted, no memory allocations
 // v – an array of nodes sorted, n – the array size
 // use vector<tree> version of inorder()
-//tree buildAVL(tree* v, int n) {  // recycling method
-tree buildAVL(vector<tree>& v, int n){
+tree buildAVL(tree* v, int n) {  // recycling method
 	if (n <= 0) return nullptr;
 	DPRINT(cout << ">buildAVL v[0]=" << v[0] << " n=" << n << " mid=" << n / 2 << endl;);
 	int mid=n/2;
 
 	tree root=v[mid];
-	
-	vector<tree> left(v.begin(), v.begin()+mid);
-	vector<tree> right(v.begin()+mid+1, v.end());
 
-	root->left=buildAVL(left,left.size());
-	root->right=buildAVL(right,right.size());
+	root->left=buildAVL(v,mid);
+	root->right=buildAVL(&v[mid+1],n-mid-1);
+	//root->right=buildAVL(v+mid+1,n-mid-1);
+
+	DPRINT(treeprint(root););
 
 	DPRINT(cout << "<buildAVL" << n << endl;);
 	return root;
@@ -838,7 +837,7 @@ tree reconstruct(tree root) {
 		// root = buildAVL(v.data(), (int)v.size()); // O(n)
 		vector<tree> v;
 		inorder(root,v);
-		root=buildAVL(v,(int)v.size());
+		root=buildAVL(v.data(),(int)v.size());
 	}
 	else {                    // recreation method
 		                      // use inorder() that returns keys sorted
@@ -847,7 +846,7 @@ tree reconstruct(tree root) {
 		// root = buildAVL(v.data(), (int)v.size()); // O(n)
 		vector<int> v;
 		inorder(root,v);
-		root=buildAVL(v,(int)v.size());
+		root=buildAVL(v.data(),(int)v.size());
 	}
 
 	DPRINT(cout << "<reconstruct " << endl;);
