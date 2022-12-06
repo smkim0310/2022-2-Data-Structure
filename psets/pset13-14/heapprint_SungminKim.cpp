@@ -51,17 +51,35 @@ tree buildBT(int* nodes, int i, int n) {
 	DPRINT(std::cout << " buildBT i=" << i << " n=" << n << std::endl;);
 	if (i > n) return nullptr;
 
-	std::cout << "your code here\n";
+	tree root=new TreeNode{nodes[i]};
+	root->left=buildBT(nodes,i*2,n);
+	root->right=buildBT(nodes,i*2+1,n);
 
-	return  nullptr;
+	return root;
 }
 
 tree buildBT(heap p) {
 	DPRINT(std::cout << " buildBT p" << std::endl;);
 
-	std::cout << "your code here\n";
+	int N=size(p);
+	if(N==0) return nullptr;
+	std::queue<tree> que;
+	tree root=new TreeNode{p->nodes[1]};
+	que.push(root);
+	int i=2;
+	while(i<=N){
+		tree leaf=new TreeNode{p->nodes[i]};
+		if(que.front()->left!=nullptr&&que.front()->right!=nullptr) que.pop();
+		else{
+			if(que.front()->left==nullptr) que.front()->left=leaf;
+			else if(que.front()->right==nullptr) que.front()->right=leaf;
+			que.push(leaf);
+			i++;
+		}
+	}
 
-	return  nullptr;
+	//treeprint(root);
+	return root;
 }
 
 // print a heap using treeprint() - must build a tree to call treeprint() functions
